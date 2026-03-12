@@ -26,7 +26,7 @@ export default function CheckoutButton({ amountPence, onSuccess, onError }: Chec
         country: "GB",
         currency: "gbp",
         total: {
-          label: "Smart Friend Top Up",
+          label: "Yapper Voice Top Up",
           amount: amountPence,
         },
         requestPayerEmail: false,

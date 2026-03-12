@@ -2,14 +2,15 @@ import { NextResponse } from "next/server";
 import { getStripe } from "@/app/lib/stripe";
 import { addBalance, logTransaction } from "@/app/lib/wallet";
 
-const ALLOWED_AMOUNTS = [100, 500, 1000]; // pence: £1, £5, £10
+const MIN_AMOUNT = 50;   // £0.50
+const MAX_AMOUNT = 5000; // £50.00
 
 export async function POST(req: Request) {
   try {
     const { amountPence } = await req.json();
 
-    if (!ALLOWED_AMOUNTS.includes(amountPence)) {
-      return NextResponse.json({ error: "Invalid amount" }, { status: 400 });
+    if (typeof amountPence !== "number" || !Number.isInteger(amountPence) || amountPence < MIN_AMOUNT || amountPence > MAX_AMOUNT) {
+      return NextResponse.json({ error: "Amount must be between £0.50 and £50.00" }, { status: 400 });
     }
 
     const paymentIntent = await getStripe().paymentIntents.create({
